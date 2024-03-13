@@ -14,7 +14,7 @@ jobs:
         with:
           repository: 'liuc-c/tampermonkey-scripts'  # 替换为仓库A的用户名和仓库名
           ref: 'main'
-          token: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub Actions 提供的 token
+          token: ${{ secrets.REPO_JX3_WBL_TOKEN }}  # 使用 GitHub Actions 提供的 token
 
       - name: Checkout jx3-wbl
         uses: actions/checkout@v2
