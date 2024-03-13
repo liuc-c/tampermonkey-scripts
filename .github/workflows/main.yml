@@ -12,7 +12,7 @@ jobs:
       - name: Checkout tampermonkey-scripts
         uses: actions/checkout@v2
         with:
-          repository: 'liu-c/tampermonkey-scripts'  # 替换为仓库A的用户名和仓库名
+          repository: 'liuc-c/tampermonkey-scripts'  # 替换为仓库A的用户名和仓库名
           ref: 'main'
           token: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub Actions 提供的 token
 
