@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-2jZ29PkG.js"(exports, module) {
+    "main-3Cm-dgO0.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -14764,8 +14764,9 @@
           __publicField(this, "replaceReg", /(·（替）)|(（替）)$/);
           __publicField(this, "replaceMap", /* @__PURE__ */ new Map([["清光彩璨礼盒", "清光彩璨·琉华礼盒"]]));
           this.domSelectors = {
-            roleCloth: "app-web-components-modal-components-role-detail-styles-index-m__positionRelative--3gVPE",
-            goodsName: "app-web-page-follow-components-styles-components-m__fs16--3K4S5"
+            aTentList: ".app-web-page-follow-index-m__followComponent--TEzXY",
+            aTentState: ".app-web-page-follow-components-styles-components-m__flexWrap--1vtQV",
+            roleCloth: "app-web-components-modal-components-role-detail-styles-index-m__positionRelative--3gVPE"
           };
           this.abortController = new AbortController();
           this.lastPromise = null;
@@ -14774,31 +14775,30 @@
           this.addTooltipImg();
           const pathName = location.pathname;
           if (pathName === "/follow") {
-            const div = document.querySelectorAll(`.${this.domSelectors.goodsName}`);
-            if (div && div.length > 0) {
-              for (const item of Array.from(div)) {
-                const name = item.textContent;
-                const parent = item.parentElement;
-                this.setShowImgEventListener(parent, name, -40, 100);
-              }
-            } else {
-              this.observerDom(document.body, this.aTentListObserverCallback.bind(this));
-            }
+            this.waitDomBySelector(this.domSelectors.aTentList).then(() => {
+              this.observerDom(document.querySelector(this.domSelectors.aTentList), this.aTentListObserverCallback.bind(this));
+            }).catch((error) => {
+              console.error("Error waiting for element:", error);
+            });
           }
-          this.observerDom(document.body, this.aTentListObserverCallback.bind(this));
           if (pathName === "/follow" || pathName === "/buyer")
             this.observerDom(document.body, this.hoverImgCallback.bind(this));
         }
+        /**
+         * 是否是剩余时间dom变化
+         */
+        isTimeChange(mutation) {
+          return mutation.type === "childList" && mutation.addedNodes.length === 1 && mutation.removedNodes.length === 0 && mutation.addedNodes[0].nodeName === "#text";
+        }
         async aTentListObserverCallback(mutationsList) {
           for (const mutation of mutationsList) {
-            if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
-              mutation.addedNodes.forEach((node) => {
-                if (node instanceof HTMLDivElement && node.classList.contains(this.domSelectors.goodsName)) {
-                  const name = node.textContent;
-                  const parent = node.parentElement;
-                  this.setShowImgEventListener(parent, name, -40, 100);
-                }
-              });
+            if (this.isTimeChange(mutation)) {
+              const stateDom = mutation.target.closest(this.domSelectors.aTentState).nextElementSibling;
+              if (location.pathname === "/follow" && location.search === "?t=skin") {
+                const infoDiv = stateDom.parentElement.children[0];
+                const name = infoDiv.textContent || "";
+                this.setShowImgEventListener(infoDiv, name, -40, 100);
+              }
             }
           }
         }
