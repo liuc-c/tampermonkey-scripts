@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.6
+// @version      1.0.7
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-ZEXDgtbr.js"(exports, module) {
+    "main-QoiUMDtC.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -10626,14 +10626,31 @@
           }
         });
       }
-      function redirectToInstallPage(installLink) {
-        location.href = installLink;
+      const updateBtnIsLoading = vue.ref(false);
+      async function redirectToInstallPage(installLink) {
+        try {
+          const response = await fetch(installLink, { method: "HEAD" });
+          if (response.ok) {
+            location.href = installLink;
+            updateBtnIsLoading.value = false;
+          } else {
+            updateBtnIsLoading.value = false;
+            errNotify(`更新失败，获取版本信息失败，请稍后再试。`);
+          }
+        } catch (error) {
+          errNotify(`更新失败，获取版本信息失败，请稍后再试。`);
+          updateBtnIsLoading.value = false;
+        }
       }
       function openUpdateWeb() {
-        redirectToInstallPage(`https://update.greasyfork.org/scripts/${currentUrl}/剑三万宝楼魔法书.user.js`);
+        updateBtnIsLoading.value = true;
+        redirectToInstallPage(`https://update.greasyfork.org/scripts/${currentUrl}/剑三万宝楼魔法书.user.js`).then(() => {
+          successNotify("正在跳转到安装页面，请稍后...");
+          updateBtnIsLoading.value = false;
+        });
       }
       function useFree() {
-        return { freeTip, ok, isFree, openUpdateWeb, checkUpdate, ad };
+        return { freeTip, ok, isFree, openUpdateWeb, checkUpdate, ad, updateBtnIsLoading };
       }
       const _hoisted_1$7 = {
         key: 0,
@@ -15307,21 +15324,13 @@
         __name: "MainMenu",
         setup(__props) {
           const { openRob } = useRob();
-          const { openUpdateWeb: openUpdateWeb2 } = useFree();
+          const { openUpdateWeb: openUpdateWeb2, updateBtnIsLoading: updateBtnIsLoading2 } = useFree();
           function openDonationImg() {
             const win = window.open();
             win.document.write(`
     <style>
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-      }
-      img {
-        width: 520px;
-      }
+      body {display: flex;justify-content: center;align-items: center;height: 100vh;margin: 0;}
+      img { width: 520px; }
     </style>
     <img src="${codeImg}" alt="donation" />
   `);
@@ -15346,13 +15355,14 @@
                 onClick: vue.unref(todo)
               }, null, 8, ["onClick"]),
               vue.createVNode(_sfc_main$a, {
+                loading: vue.unref(updateBtnIsLoading2),
                 push: "",
                 tooltip: "更新脚本",
                 "tooltip-position": "left",
                 icon: "i-pixelarticons-cloud-download",
                 color: "green",
                 onClick: vue.unref(openUpdateWeb2)
-              }, null, 8, ["onClick"]),
+              }, null, 8, ["loading", "onClick"]),
               vue.createVNode(_sfc_main$a, {
                 push: "",
                 tooltip: "Buy me a coffee",
