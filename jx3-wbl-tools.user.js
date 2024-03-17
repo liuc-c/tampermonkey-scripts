@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.5
+// @version      1.0.6
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-3Cm-dgO0.js"(exports, module) {
+    "main-ZEXDgtbr.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -10639,7 +10639,10 @@
         key: 0,
         class: "w-100vw pt-10px text-gray"
       };
-      const _hoisted_2$2 = { "text-red": "" };
+      const _hoisted_2$2 = {
+        key: 1,
+        "text-red": ""
+      };
       const _sfc_main$9 = /* @__PURE__ */ vue.defineComponent({
         __name: "robTableTop",
         props: ["props"],
@@ -10730,7 +10733,7 @@
                 [ClosePopup]
               ]),
               vue.unref(isFree2) ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_1$7, vue.toDisplayString(vue.unref(freeTip2)), 1)) : vue.createCommentVNode("", true),
-              vue.createElementVNode("div", _hoisted_2$2, vue.toDisplayString(vue.unref(ad2)), 1)
+              vue.unref(isFree2) ? (vue.openBlock(), vue.createElementBlock("div", _hoisted_2$2, vue.toDisplayString(vue.unref(ad2)), 1)) : vue.createCommentVNode("", true)
             ], 64);
           };
         }
