@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.10
+// @version      1.0.11
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-W1DT7Xn-.js"(exports, module) {
+    "main-4N20sCua.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -10288,7 +10288,7 @@
           captchaState.value = true;
           if (timer)
             clearTimeout(timer);
-          let count = 300;
+          let count = 10 * 60;
           function startCountdown() {
             if (count <= 0) {
               initCaptchaValue$1();
@@ -10305,17 +10305,21 @@
         });
         captchaObj.showBox();
       };
-      async function loadCaptcha$1() {
+      function loadCaptcha$1() {
         captchaLoading.value = true;
         initCaptchaValue$1();
-        const res = await getCaptchaPreAuthApi();
-        if (res) {
-          const result = res.data.config;
-          initGeetest4({ product: "bind", captchaId: result.captchaId }, handlerEmbed);
-        } else {
-          warningNotify("获取验证码失败，请重试");
+        getCaptchaPreAuthApi().then((res) => {
+          if (res) {
+            const result = res.data.config;
+            initGeetest4({ product: "bind", captchaId: result.captchaId }, handlerEmbed);
+          } else {
+            warningNotify("获取验证码失败，请重试");
+            captchaLoading.value = false;
+          }
+        }).catch((e) => {
+          warningNotify(`获取验证码失败，请重试。${e.message}`);
           captchaLoading.value = false;
-        }
+        });
         setTimeout(() => {
           if (captchaLoading.value === true) {
             warningNotify("验证码初始化超时，请重试。");
@@ -10612,10 +10616,10 @@
       function atob(str) {
         return decodeURIComponent(escape(window.atob(str)));
       }
-      const isFree = vue.ref(false);
+      const isFree$1 = vue.ref(false);
       const hideUrl = "478399";
       const freeUrl = "490079";
-      const currentUrl = isFree.value ? freeUrl : hideUrl;
+      const currentUrl = isFree$1.value ? freeUrl : hideUrl;
       const freeTip = atob("5pys6ISa5pys5piv5Li65LqG5a2m5Lmg56CU56m25byA5Y+R77yM5YWN6LS55o+Q5L6b77yM5LiN5b6X6L+b6KGM5Lu75L2V5b2i5byP55qE6L2s5Y+R44CB5Y+R5biD44CB5Lyg5pKt44CC6K+35LqOMjTlsI/ml7blhoXljbjovb3mnKzohJrmnKzjgILlpoLmnpzmgqjmmK/otK3kubDnmoTlj6/og73lt7Lnu4/ooqvpqpfvvIzor7fogZTns7vljZblrrbpgIDmrL7jgII=");
       const ok = atob("5oiR55+l6YGT5LqG");
       const ad = atob("5bCP5aOw6YC86YC877ya57q15pyI5oG25Lq65ZK46bG85biu5pS25Lq677yM5biu5Lya5ZCN77ya5ZGAIO+8jOW4ruS8mue+pO+8mjc3MDY5NTcxMyDvvIzmnInmhI/ogIXlj6/liqDnvqTmiJbnm7TmjqXnlLPor7flhaXluK4=");
@@ -10654,7 +10658,7 @@
         });
       }
       function useFree() {
-        return { freeTip, ok, isFree, openUpdateWeb, checkUpdate, ad, updateBtnIsLoading, currentVersion };
+        return { freeTip, ok, isFree: isFree$1, openUpdateWeb, checkUpdate, ad, updateBtnIsLoading, currentVersion };
       }
       const _hoisted_1$8 = { flex: "" };
       const _hoisted_2$2 = {
@@ -14214,11 +14218,12 @@
         }
         initCaptchaValue();
       }
+      const { isFree } = useFree();
       function pay(orderId, type) {
         payApi(orderId, type).then((res) => {
           const data = res.data;
           const pay_attach = data.pay_attach;
-          if (Screen.xs)
+          if (Screen.xs && isFree)
             location.href = pay_attach;
           else
             showQrcode(pay_attach);
@@ -14260,9 +14265,9 @@
           errNotify("无法获取商品信息，请稍后再试");
           return false;
         }
-        const isEligibleForPurchase = row.state === 5 || row.state === 3 && (row == null ? void 0 : row.end_time) && row.end_time - Date.now() < 5 * 60 * 1e3;
+        const isEligibleForPurchase = row.state === 5 || row.state === 3 && (row == null ? void 0 : row.end_time) && row.end_time - Date.now() < 10 * 60 * 1e3;
         if (!isEligibleForPurchase) {
-          warningNotify("请选择 [ 在售期 ] 或 [ 公示期仅剩 5 分钟 ] 的商品进行抢购");
+          warningNotify("请选择 [ 在售期 ] 或 [ 公示期仅剩 10 分钟 ] 的商品进行抢购");
           return false;
         }
         if (!isHaveRole(row.type)) {
@@ -14271,12 +14276,12 @@
         }
         if (!geetestObj.value) {
           warningNotify("请先完成验证码验证");
-          await loadCaptcha();
+          loadCaptcha();
           return false;
         }
-        if (row.state === 3 && (row == null ? void 0 : row.end_time) && row.end_time - lastCaptchaTime.value > 5 * 60 * 1e3) {
+        if (row.state === 3 && (row == null ? void 0 : row.end_time) && row.end_time - lastCaptchaTime.value > 10 * 60 * 1e3) {
           warningNotify("验证码即将过期，请重新验证");
-          await loadCaptcha();
+          loadCaptcha();
           return false;
         }
         return true;
