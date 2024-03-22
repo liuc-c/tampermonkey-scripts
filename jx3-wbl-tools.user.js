@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.13
+// @version      1.0.14
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-HPhxUzhg.js"(exports, module) {
+    "main-oxPAW_Ys.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -9122,13 +9122,22 @@
         }
         return role.textContent !== "请选择角色";
       }
-      function isLogin() {
+      async function isLogin(isRemoteVerify = false) {
         const login = document.querySelector(".app-web-components-head-components-UserInfo-index-m__displayFlex--1BN9a .app-web-components-auth-handler-index-m__authWrapper--28yCW");
         if (login && (login == null ? void 0 : login.textContent) === "登录") {
           warningNotify("请先登录");
           login.click();
+          return false;
         }
-        return !(login && login.textContent === "登录");
+        if (isRemoteVerify) {
+          const res = await getBaseInfoApi();
+          if (res.code === -3) {
+            warningNotify(res.msg);
+            return false;
+          }
+          return true;
+        }
+        return true;
       }
       function setLocalStorage(key, value) {
         try {
@@ -9222,7 +9231,9 @@
         // 获取商品列表
         goods_list: { url: `${baseUrl}/api/buyer/goods/list`, type: "GET" },
         // 获取订单状态
-        order_status: { url: `${baseUrl}/api/buyer/order/status`, type: "GET" }
+        order_status: { url: `${baseUrl}/api/buyer/order/status`, type: "GET" },
+        // 基础信息
+        base_info: { url: `${baseUrl}/api/passport/user/base_info`, type: "GET" }
       };
       function getCaptchaPreAuthApi() {
         return http(`${apis.pre_auth.url}?version=v5&__ts__=${getTs()}`);
@@ -9334,6 +9345,9 @@
       }
       function getTradeDataApi(consignment_id) {
         return http(`${apis.trade_data.url}?req_id=${getReqId()}&consignment_id=${consignment_id}&game_id=jx3&__ts__=${getTs()}`);
+      }
+      function getBaseInfoApi() {
+        return http(`${apis.trade_data.url}?req_id=${getReqId()}&game_id=jx3&__ts__=${getTs()}`);
       }
       function getLocalGoodsInfo(goodsName) {
         const goodsInfo = _GM_getValue("goodsInfo", {});
@@ -9578,7 +9592,7 @@
       }
       function useRob() {
         const openRob = async () => {
-          if (isLogin()) {
+          if (await isLogin()) {
             isShowRob.value = true;
             await getList();
           }
@@ -15972,7 +15986,7 @@
                 return;
               }
             }
-            if (goods.followed_num === 0) {
+            if (goods.followed_num < 10) {
               hideAutoFollowLoading();
               return;
             }
@@ -16012,8 +16026,9 @@
         }
         return { showAutoFollowLoading: showAutoFollowLoading2, hideAutoFollowLoading: hideAutoFollowLoading2 };
       }
-      function openConcernDialog() {
-        isShowConcernDialog.value = true;
+      async function openConcernDialog() {
+        if (await isLogin(true))
+          isShowConcernDialog.value = true;
       }
       function onConcernDialogClose() {
         setNoGoodsNameFollow();
