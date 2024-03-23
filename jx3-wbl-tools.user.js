@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.17
+// @version      1.0.18
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-7F6R1-IW.js"(exports, module) {
+    "main-emDurug2.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -9347,7 +9347,7 @@
         return http(`${apis.trade_data.url}?req_id=${getReqId()}&consignment_id=${consignment_id}&game_id=jx3&__ts__=${getTs()}`);
       }
       function getBaseInfoApi() {
-        return http(`${apis.base_info.url}?req_id=${getReqId()}&game_id=jx3&__ts__=${getTs()}`);
+        return httpWithErr(`${apis.base_info.url}?req_id=${getReqId()}&game_id=jx3&__ts__=${getTs()}`);
       }
       function getLocalGoodsInfo(goodsName) {
         const goodsInfo = _GM_getValue("goodsInfo", {});
@@ -9533,6 +9533,7 @@
               if (goodsInfo === void 0) {
                 goodsInfo = await getGoodsInfo(item.goods_name, item.consignment_id);
                 goodsInfoMap[item.goods_name] = goodsInfo;
+                await new Promise((resolve) => setTimeout(resolve, 100));
               }
               item.minPublicPrice = goodsInfo.minPublicPrice;
               item.minSalePrice = goodsInfo.minSalePrice;
@@ -9543,7 +9544,6 @@
           } catch (error) {
             console.error("Failed to get additional info:", error);
           }
-          await new Promise((resolve) => setTimeout(resolve, 100));
         }
       }
       const inputFollowId = vue.ref("");
