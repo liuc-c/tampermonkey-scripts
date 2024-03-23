@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.14
+// @version      1.0.15
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-oxPAW_Ys.js"(exports, module) {
+    "main-XO2QYr6U.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -9347,7 +9347,7 @@
         return http(`${apis.trade_data.url}?req_id=${getReqId()}&consignment_id=${consignment_id}&game_id=jx3&__ts__=${getTs()}`);
       }
       function getBaseInfoApi() {
-        return http(`${apis.trade_data.url}?req_id=${getReqId()}&game_id=jx3&__ts__=${getTs()}`);
+        return http(`${apis.base_info.url}?req_id=${getReqId()}&game_id=jx3&__ts__=${getTs()}`);
       }
       function getLocalGoodsInfo(goodsName) {
         const goodsInfo = _GM_getValue("goodsInfo", {});
