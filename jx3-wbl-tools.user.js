@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.16
+// @version      1.0.17
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
