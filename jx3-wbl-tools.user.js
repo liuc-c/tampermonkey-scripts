@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.27
+// @version      1.0.28
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-RGEekpj1.js"(exports, module) {
+    "main-miFnGqFo.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -14597,10 +14597,17 @@
           currentStep.value = "selectAdditionalService";
         } else {
           currentStep.value = "pay";
-          if (row.state === 5)
+          if (row.state === 5) {
             await createOrderInSalePeriod(currentDetail.value, row.type);
-          else
+          } else if (row.state === 3) {
             await waitBuyInPublicityPeriod(currentDetail.value, row.type);
+          } else if (row.state === 6) {
+            warningNotify("商品已售出");
+            isShowZfbDialog.value = false;
+          } else if (row.state === 7) {
+            warningNotify("商品已下架");
+            isShowZfbDialog.value = false;
+          }
         }
       }
       async function nextStep() {
