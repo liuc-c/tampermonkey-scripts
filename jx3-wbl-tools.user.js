@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.28
+// @version      1.0.29
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-miFnGqFo.js"(exports, module) {
+    "main-HjEq3D4H.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -14492,16 +14492,19 @@
             isShowZfbDialog.value = false;
           } else if (data.state === 2) {
             infoNotify(`[ ${orderId} ] 订单已关闭`);
+            await getList();
             isShowZfbDialog.value = false;
             return;
           } else if (data.state === 5) {
             successNotify("恭喜小红手成功抢到商品！！！");
             fireworks();
+            await getList();
             isShowZfbDialog.value = false;
             addSuccessCount();
             return;
           } else if (data.state === 7) {
             warningNotify(`很遗憾，[ ${orderId} ] 订单已退款`);
+            await getList();
             isShowZfbDialog.value = false;
             return;
           }
@@ -14603,9 +14606,11 @@
             await waitBuyInPublicityPeriod(currentDetail.value, row.type);
           } else if (row.state === 6) {
             warningNotify("商品已售出");
+            await getList();
             isShowZfbDialog.value = false;
           } else if (row.state === 7) {
             warningNotify("商品已下架");
+            await getList();
             isShowZfbDialog.value = false;
           }
         }
@@ -14643,12 +14648,15 @@
               break;
             case 6:
               errNotify("商品已售出");
+              await getList();
               break;
             case 7:
               errNotify("商品已下架");
+              await getList();
               break;
             default:
-              errNotify("商品状态异常，请刷新后重试");
+              errNotify("商品状态异常，请重试");
+              await getList();
           }
         } else {
           errNotify("无法获取商品信息，请稍后再试");
@@ -16510,6 +16518,7 @@
         }
         function showAutoFollowLoading2() {
           isStopFollow.value = true;
+          isShowConcernDialog.value = false;
           dismiss.value = Notify.create({
             spinner: true,
             message: "自动关注中...",
