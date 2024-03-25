@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.26
+// @version      1.0.27
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-YYru-Ttn.js"(exports, module) {
+    "main-RGEekpj1.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -14480,13 +14480,15 @@
       }
       function checkOrderStatus(orderId, orderType) {
         let startTime = Date.now();
+        let isPaySuccess = false;
         const checkStatus = async () => {
           if (Date.now() - startTime > 2 * 60 * 1e3)
             return;
           const res = await getOrderStatusApi(orderId, orderType);
           const data = res.data;
-          if (data.state === 3) {
+          if (data.state === 3 && !isPaySuccess) {
             successNotify(`[ ${orderId} ] 订单已支付成功`);
+            isPaySuccess = true;
             isShowZfbDialog.value = false;
           } else if (data.state === 2) {
             infoNotify(`[ ${orderId} ] 订单已关闭`);
@@ -15292,6 +15294,7 @@
         "梨花入月": "https://jx3.xoyo.com/uploadfile/2023/0401/20230401014657401.gif",
         "鲸歌幻梦·珠夜": "https://jx3.xoyo.com/uploadfile/2023/0302/20230302094238243.gif",
         "鲸歌幻梦·琉华": "https://jx3.xoyo.com/uploadfile/2023/0302/20230302094238243.gif",
+        "不解缘": "https://jx3.xoyo.com/uploadfile/2024/0202/20240202015543525.jpeg",
         "背挂背挂背挂↑↑↑↑↑": "------------------------------------------------------------",
         "头像头像头像↓↓↓↓↓": "------------------------------------------------------------",
         "像韵·楹香雪": "https://jx3.xoyo.com/uploadfile/2022/0530/20220530101247401.gif",
