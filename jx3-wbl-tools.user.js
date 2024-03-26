@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.32
+// @version      1.0.33
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-Nh2xvHuL.js"(exports, module) {
+    "main-zI66R5dR.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -10874,14 +10874,17 @@
       const ad = atob("5bCP5aOw6YC86YC877ya57q15pyI5oG25Lq65ZK46bG85biu5pS25Lq677yM5biu5Lya5ZCN77ya5ZGAIO+8jOW4ruS8mue+pO+8mjc3MDY5NTcxMyDvvIzmnInmhI/ogIXlj6/liqDnvqTmiJbnm7TmjqXnlLPor7flhaXluK4=");
       const currentVersion = _GM_info.script.version;
       function checkUpdate() {
-        fetch(`https://greasyfork.org/scripts/${currentUrl}-剑三万宝楼魔法书/code`).then((response) => response.text()).then((pageContent) => {
-          const match = pageContent.match(/@version\s*(.+)/);
-          if (match) {
-            const latestVersion = match[1];
-            if (latestVersion > currentVersion)
-              successNotify("魔法书有新版本可用，请更新！");
-          }
-        });
+        if (!(sessionStorage.getItem("isCheckedUpdate") === "true")) {
+          sessionStorage.setItem("isCheckedUpdate", "true");
+          fetch(`https://greasyfork.org/scripts/${currentUrl}-剑三万宝楼魔法书/code`).then((response) => response.text()).then((pageContent) => {
+            const match = pageContent.match(/@version\s*(.+)/);
+            if (match) {
+              const latestVersion = match[1];
+              if (latestVersion > currentVersion)
+                successNotify("魔法书有新版本可用，请更新！");
+            }
+          });
+        }
       }
       const isFirefox = navigator.userAgent.includes("Firefox");
       const updateBtnIsLoading = vue.ref(false);
@@ -16137,13 +16140,14 @@
           types.unshift(plusReg.test(name) ? "·豪华" : "·标准");
           return types;
         }
-        generateUrls(name, baseName, types) {
+        generateUrls(baseName, types) {
           const urls = types.map((item) => this.getClothUrl(baseName + item));
           const newBaseName = baseName.replaceAll("·", "");
           if (baseName !== newBaseName) {
             const newUrls = types.map((item) => this.getClothUrl(newBaseName + item));
             urls.push(...newUrls);
           }
+          urls.unshift(this.getClothUrl(baseName));
           return urls;
         }
         isBox(name) {
@@ -16182,16 +16186,16 @@
           if (!this.isBox(name)) {
             const reg = /·(黑发|衣|外装|左|右|白发|金发|披风|帽|发)$/;
             const baseName = name.replace(reg, "");
-            const urls = this.generateUrls(name, baseName, types);
+            const urls = this.generateUrls(baseName, types);
             return await this.getImageFromUrls(name, urls);
           } else {
             const roleClothesReg = /^(黑发|白发|金发|发|帽)·/;
             if (roleClothesReg.test(name)) {
               const baseName = name.replace(roleClothesReg, "");
-              const urls = this.generateUrls(name, baseName, types);
+              const urls = this.generateUrls(baseName, types);
               return await this.getImageFromUrls(name, urls);
             } else {
-              const urls = this.generateUrls(name, name, types);
+              const urls = this.generateUrls(name, types);
               return await this.getImageFromUrls(name, urls);
             }
           }
