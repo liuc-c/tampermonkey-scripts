@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.33
+// @version      1.0.34
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-zI66R5dR.js"(exports, module) {
+    "main-OXsI5Tcl.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -9472,7 +9472,7 @@
           label: "结束时间",
           align: "left",
           field: "remaining_time",
-          format: (val) => val === 0 ? "已失效" : new Date((/* @__PURE__ */ new Date()).getTime() + val * 1e3).toLocaleString(),
+          format: (val, row) => val === 0 ? "已失效" : new Date((row == null ? void 0 : row.end_time) || (/* @__PURE__ */ new Date()).getTime() + val * 1e3).toLocaleString(),
           classes: (row) => row.remaining_time < 600 && row.remaining_time > 0 ? "text-red" : "",
           sortable: true
         },
@@ -9504,12 +9504,13 @@
               return statePriority[a.state] - statePriority[b.state];
             return a.remaining_time - b.remaining_time;
           }).map((item) => {
+            const end_time = (/* @__PURE__ */ new Date()).getTime() + item.remaining_time * 1e3;
             if (item.type === 3) {
               const localGoodsInfo = getLocalGoodsInfo(item.goods_name);
               if (localGoodsInfo) {
                 return {
                   ...item,
-                  end_time: (/* @__PURE__ */ new Date()).getTime() + item.remaining_time * 1e3,
+                  end_time,
                   clock: false,
                   minAvgPrice: localGoodsInfo.minAvgPrice,
                   sellCount: localGoodsInfo.sellCount,
@@ -9517,7 +9518,7 @@
                 };
               }
             }
-            return { ...item, end_time: (/* @__PURE__ */ new Date()).getTime() + item.remaining_time * 1e3, clock: false };
+            return { ...item, end_time, clock: false };
           });
         } else {
           rows.value = [];
