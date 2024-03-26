@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.31
+// @version      1.0.32
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main--NtwdScn.js"(exports, module) {
+    "main-Nh2xvHuL.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -14609,10 +14609,22 @@
         payApi(orderId, type).then((res) => {
           const data = res.data;
           const pay_attach = data.pay_attach;
-          if (Screen.xs && isFree)
+          if (Screen.xs && isFree) {
             location.href = pay_attach;
-          else
+          } else {
             showQrcode(pay_attach);
+            if ("Notification" in window) {
+              if (Notification.permission === "granted") {
+                const notification = new Notification("扫码提醒", {
+                  body: "请使用支付宝扫码支付",
+                  icon: "https://img.alicdn.com/tfs/TB1qEwuzrj1gK0jSZFOXXc7GpXa-32-32.ico"
+                });
+                setTimeout(() => {
+                  notification.close();
+                }, 30 * 1e3);
+              }
+            }
+          }
           checkOrderStatus(orderId, type);
         });
       }
