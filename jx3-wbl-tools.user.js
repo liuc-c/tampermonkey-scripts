@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.35
+// @version      1.0.36
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-7-ynbB1B.js"(exports, module) {
+    "main-hXre46Yp.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -16033,7 +16033,7 @@
           const blockNameRegPre = /^(发型)·/;
           const blockKeyWords = ["芽芽", "表情包", "佩囊"];
           const blockNames = /* @__PURE__ */ new Set(["耳绒绒"]);
-          const typeBlock = /* @__PURE__ */ new Set(["佩囊", "小头像", "宠物", "马具", "手饰", "眼饰", "肩饰", "面挂", "背挂", "腰挂"]);
+          const typeBlock = /* @__PURE__ */ new Set(["小头像", "宠物", "马具", "肩饰", "背挂", "腰挂"]);
           const isTypeBlocked = type !== "" && typeBlock.has(type);
           const isUrlBlocked = blockUrls.has(src) || blockUrlKeyWords.some((item) => src.includes(item));
           const isNameBlocked = blockNameReg.test(name) || blockNameRegPre.test(name) || blockNames.has(name) || blockKeyWords.some((item) => name.includes(item));
