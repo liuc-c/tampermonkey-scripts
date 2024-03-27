@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         剑三万宝楼魔法书
 // @namespace    jx3
-// @version      1.0.37
+// @version      1.0.38
 // @author       方仟仟
 // @description  万宝楼小助手
 // @license      MIT
@@ -34,7 +34,7 @@
     return value;
   };
   var require_main_001 = __commonJS({
-    "main-2dZ2uWnU.js"(exports, module) {
+    "main-VW0wuk4R.js"(exports, module) {
       const useSizeDefaults = {
         xs: 18,
         sm: 24,
@@ -10907,10 +10907,10 @@
       function atob(str) {
         return decodeURIComponent(escape(window.atob(str)));
       }
-      const isFree$1 = vue.ref(false);
+      const isFree = vue.ref(false);
       const hideUrl = "478399";
       const freeUrl = "490079";
-      const currentUrl = isFree$1.value ? freeUrl : hideUrl;
+      const currentUrl = isFree.value ? freeUrl : hideUrl;
       const freeTip = atob("5pys6ISa5pys5piv5Li65LqG5a2m5Lmg56CU56m25byA5Y+R77yM5YWN6LS55o+Q5L6b77yM5LiN5b6X6L+b6KGM5Lu75L2V5b2i5byP55qE6L2s5Y+R44CB5Y+R5biD44CB5Lyg5pKt44CC6K+35LqOMjTlsI/ml7blhoXljbjovb3mnKzohJrmnKzjgILlpoLmnpzmgqjmmK/otK3kubDnmoTlj6/og73lt7Lnu4/ooqvpqpfvvIzor7fogZTns7vljZblrrbpgIDmrL7jgII=");
       const ok = atob("5oiR55+l6YGT5LqG");
       const ad = atob("5bCP5aOw6YC86YC877ya57q15pyI5oG25Lq65ZK46bG85biu5pS25Lq677yM5biu5Lya5ZCN77ya5ZGAIO+8jOW4ruS8mue+pO+8mjc3MDY5NTcxMyDvvIzmnInmhI/ogIXlj6/liqDnvqTmiJbnm7TmjqXnlLPor7flhaXluK4=");
@@ -10957,7 +10957,7 @@
         });
       }
       function useFree() {
-        return { freeTip, ok, isFree: isFree$1, openUpdateWeb, checkUpdate, ad, updateBtnIsLoading, currentVersion };
+        return { freeTip, ok, isFree, openUpdateWeb, checkUpdate, ad, updateBtnIsLoading, currentVersion };
       }
       const { showAutoFollowLoading, hideAutoFollowLoading } = useAutoFollowLoading();
       const priceDiscount = vue.ref(9);
@@ -14649,13 +14649,12 @@
         }
         initCaptchaValue();
       }
-      const { isFree } = useFree();
       function pay(orderId, type) {
         payApi(orderId, type).then((res) => {
           const data = res.data;
           const pay_attach = data.pay_attach;
-          if (Screen.xs && isFree) {
-            location.href = pay_attach;
+          if (Screen.xs) {
+            window.open(pay_attach);
           } else {
             showQrcode(pay_attach);
             if ("Notification" in window) {
@@ -16645,7 +16644,7 @@
                         return vue.openBlock(), vue.createElementBlock(vue.Fragment, {
                           key: col.consignment_id
                         }, [
-                          (col == null ? void 0 : col.value) !== 0 ? (vue.openBlock(), vue.createBlock(QItem, { key: 0 }, {
+                          (col == null ? void 0 : col.value) !== 0 && (col == null ? void 0 : col.value) !== "无" ? (vue.openBlock(), vue.createBlock(QItem, { key: 0 }, {
                             default: vue.withCtx(() => [
                               col.label === "操作" ? (vue.openBlock(), vue.createBlock(QBtn, {
                                 key: 0,
